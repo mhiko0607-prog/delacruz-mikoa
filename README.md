@@ -217,6 +217,45 @@ $router->get('/api/users', 'Api::users');
 
 ---
 
+## Product Management Example
+
+This repository includes a Vue 3 product-management client served by LavaLust, a JWT-authenticated product API, and migrations for the `products`, `users`, and `refresh_tokens` tables.
+
+1. Copy `.env.example` to `.env` and configure the Aiven MySQL service values:
+
+   ```dotenv
+   DB_DRIVER=mysql
+   DB_HOST=your-service-name.aivencloud.com
+   DB_PORT=your-service-port
+   DB_USERNAME=avnadmin
+   DB_PASSWORD=your-aiven-password
+   DB_NAME=defaultdb
+   DB_CHARSET=utf8mb4
+   DB_SSL_CA=C:\path\to\ca.pem
+   ```
+
+   Download the CA certificate from the Aiven service page and set `DB_SSL_CA` to its local path. `DB_USER` remains supported as a username fallback.
+
+2. Set `JWT_SECRET` and `REFRESH_TOKEN_KEY` to two different random values, each at least 32 characters. For example, run `php -r "echo bin2hex(random_bytes(32)), PHP_EOL;"` twice. Keep `.env` private.
+
+3. Run the database migrations with `php lava migration run`, then open the application root URL. The products migration is versioned separately so existing databases that recorded the earlier placeholder migration still receive the products table. Create an account from the sign-in page; public registration always creates a standard user account.
+
+For a local PHP development server, run `php -S 127.0.0.1:8787 dev-server.php` from the project root. This routes API requests through LavaLust and serves frontend assets from `public/`. With Laragon/Apache, open the configured project URL instead.
+
+Product API routes use bearer access tokens:
+
+| Method | Route | Description |
+|---|---|---|
+| `GET` | `/api/products` | List products |
+| `GET` | `/api/products/{id}` | Read one product |
+| `POST` | `/api/products` | Create a product |
+| `PUT` / `PATCH` | `/api/products/{id}` | Replace or partially update a product |
+| `DELETE` | `/api/products/{id}` | Delete a product |
+
+The login, refresh, and logout endpoints are `/api/login`, `/api/refresh`, and `/api/logout`. Product requests return `401` unless they include a valid access token. Authenticated users can view products; only administrators can create, update, or delete them. Public registration always assigns the `user` role; administrator privileges must be assigned through trusted server-side administration. The Vue client hides product-edit controls and the users-management link for non-admin users. The users-management link opens `https://api-tester.marasigan.dev/` in a new tab for administrators. The API client handles token refresh and sends requests to the same LavaLust origin.
+
+---
+
 ## Philosophy
 
 LavaLust is built on a single principle: **minimal core, maximum control.**

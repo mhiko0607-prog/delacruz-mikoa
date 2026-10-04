@@ -1,0 +1,20 @@
+<?php
+defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f6f8">
+    <title>Products | LavaLust</title>
+    <link rel="stylesheet" href="assets/products.css">
+</head>
+<body>
+    <div id="app">
+        <div class="app-loading" role="status">Loading product management...</div>
+    </div>
+    <script src="https://unpkg.com/vue@3.5.13/dist/vue.global.prod.js" defer></script>
+    <script src="assets/products.js" defer></script>
+</body>
+</html>

@@ -161,6 +161,7 @@ class Api
     public function __construct()
     {
         $this->_lava = lava_instance();
+        $this->_lava->call->database(); // need toh dito
         $this->_lava->call->library('cache');
         $this->_lava->config->load('api');
 
@@ -375,6 +376,7 @@ class Api
      */
     public function respond($data, $code = 200)
     {
+        header('Content-Type: application/json; charset=utf-8');
         http_response_code($code);
         echo json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         exit;

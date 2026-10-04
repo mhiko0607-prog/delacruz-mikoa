@@ -438,6 +438,9 @@ class Router
         }
 
         if ($method === 'OPTIONS') {
+            if ($url === '/api' || strpos($url, '/api/') === 0) {
+                load_class('config', 'kernel')->load('api');
+            }
             handle_cors();
             http_response_code(204);
             exit;
